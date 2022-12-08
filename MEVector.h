@@ -10,9 +10,10 @@
 
 #ifndef MEVECTOR_MEVECTOR_H
 #define MEVECTOR_MEVECTOR_H
-#include <iostream>
-using namespace std;
 
+#include <iostream>
+
+using namespace std;
 template <class T>
 class MEVector {
 private:
@@ -48,7 +49,7 @@ public:
     // iterator 1 <= iterator 2 otherwise do nothing
     // Throw exception if any iterator outside range
     void clear(); // Delete all vector content
-    void insert(T *p, T); // Insert item at iterator
+    void insert(T *p,T); // Insert item at iterator
     // Throw exception if invalid
 
     // Iterators // Supports *, + and ++ operations at least
@@ -68,10 +69,200 @@ public:
     int capacity() const; // Return size of current allocated array
     int resize(); // Relocate to bigger space
     bool empty(); // Return true if size is 0
-
     // Friends
     friend ostream& operator << (ostream& out, MEVector<T>vec);
 };
+template<class T>
+MEVector<T>::MEVector(int cap) {
+    this->Size = 0;
+    this->Capacity = cap;
+    this->arr = new T[cap];
+}
+
+// function to make the vector take more capacity that it allocated
+template<class T>
+int MEVector<T>::resize() {
+    T *newArr = new T[Capacity * 2];
+
+    for (int i = 0; i < Size; ++i) {
+        newArr[i] = arr[i];
+    }
+
+    delete[] arr;
+    arr = newArr;
+    newArr = nullptr;
+
+    return (Capacity * 2);
+}
+
+// destructor that make memory free
+template<class T>
+MEVector<T>::~MEVector<T>(){
+    delete[] arr;
+}
+
+// move assignment operator that change the ownership of the "rhs" object to lhs object by assignment operator
+template<class T>
+MEVector<T> &MEVector<T>::operator=(const MEVector<T> && vec) {
+    if (this != &vec){
+        Capacity = vec.Capacity;
+        Size = vec.Size;
+
+        delete arr;
+        arr = vec.arr;
+        vec.arr = nullptr;
+    }
+}
+
+// bitwise operator<< to print vector
+template<class T>
+ostream &operator<<(ostream &out, MEVector<T> vec) {
+    cout << "[";
+    for (int i = 0; i < vec.Size - 1; ++i) {
+        cout << vec[i] << ", ";
+    }
+    cout << vec[vec.Size - 1] << "]" << endl;
+    return out;
+}
+template<class T>
+bool MEVector<T>::operator< (const MEVector<T>&another){
+    for(int i =0; i<Size;i++){
+        if(arr[i]>another.arr[i]){
+            return false;
+        } else{
+            continue;
+        }
+    }
+    return true;
+}
+// function that return vector size
+template<class T>
+int MEVector<T>::size() const {
+    return this->Size;
+}
+
+// function to check that the two vectors are equal
+template<class T>
+bool MEVector<T>::operator==(const MEVector<T> & vec) {
+    if (vec.Size == this->Size) {
+        for (int i = 0; i < vec.Size; ++i) {
+            if (vec[i] != *((this->arr) + i)){
+                return false;
+            }
+        }
+        return true;
+    }
+    return false;
+}
+
+template<class T>
+void MEVector<T>::clear() {
+    this->Capacity = 10;
+    this->Size = 0;
+    delete[] this->arr;
+}
+
+template<class T>
+T *MEVector<T>::begin() {
+    return arr;
+}
+template<class T>
+T *MEVector<T>::end() {
+    return (arr+Size-1);
+}
+
+// function to put an element in the back of the vector
+template<class T>
+int MEVector<T>::push_back(T element) {
+    Size++;
+    if (Size >= Capacity){
+        cout << this->resize() << endl;
+    }
+    *((this->arr) + Size -1) = element;
+    return Size - 1;
+}
+
+template<class T>
+T MEVector<T>::pop_back() {
+    Size--;
+    return Size - 1;
+
+}
+template<class T>
+void MEVector<T>::insert(T *p,T element) {
+    Size++;
+    for(int i = Size-1;i>*p;--i){
+            arr[i]=arr[i-1];
+        }
+    arr[*p]=element;
+    }
+
+template<class T>
+void MEVector<T>::erase(T *p) {
+    if (p > (arr - 1) and p < (arr + Size)){
+        T *newArr = new T[Capacity];
+        for (int i = 0; i < Size; ++i) {
+            if (p != (arr + i)){
+                newArr[i] = arr[i];
+            }
+        }
+        delete[] arr;
+        arr = newArr;
+        newArr = nullptr;
+
+    }else{
+        throw invalid_argument("invalid iterator");
+    }
+}
+
+template<class T>
+void MEVector<T>:: erase(T *p1,T *p2){
+//    if (p1<&Size and p2<&Size ) {
+//        throw invalid_argument("invalid iterator");
+//    }
+     if(p1<p2){
+            T *newArr = new T[Capacity];
+
+            for (int i = 0; i < Size; ++i) {
+                if (p1 != (arr + i)){
+                    newArr[i] = arr[i];
+                }
+                p1++;
+            }
+            delete[] arr;
+            arr = newArr;
+            newArr = nullptr;
+
+        }
+    }
+
+template<class T>
+T &MEVector<T>::operator[](int index) {
+    if (index >= 0 and index < size()){
+        return arr[index];
+    }else{
+        throw invalid_argument("out of range");
+    }
+}
+template<class T>
+bool MEVector<T>::empty() {
+    if (Size==0){
+        return true;
+    } else{
+        return false;
+    }
+}
+template<class T>
+int MEVector<T>::capacity() const {
+    return Capacity;
+}
+
+
+
+
+
+
+
 
 
 
