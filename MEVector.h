@@ -31,6 +31,7 @@ public:
     ~MEVector(); // Delete allocated memory
     MEVector &operator=(const MEVector&); // Copy assignment
     MEVector &operator=(const MEVector&&); // Move assignment
+    MEVector();
 
     // Access operations
     T& operator[](int); // Access item by reference
@@ -70,8 +71,16 @@ public:
     bool empty(); // Return true if size is 0
 
     // Friends
-    friend ostream& operator << (ostream& out, MEVector<T>vec);
+//    friend ostream& operator << (ostream& out, MEVector<T> vec);
+    friend ostream& operator<<(ostream &out, MEVector<T>);
 };
+
+template<class T>
+MEVector<T>::MEVector() {
+    Size = 0;
+    Capacity = 10;
+    arr = new T[Capacity];
+}
 
 // constructor that takes specific integer, and it's the capacity of this vector
 template<class T>
@@ -79,6 +88,10 @@ MEVector<T>::MEVector(int size) {
     this->Size = size;
     this->Capacity = size;
     this->arr = new T[size];
+
+    for(int i = 0; i < Size; i++){
+        arr[i] = 0;
+    }
 }
 
 // constructor that initialized with array and it's size
@@ -114,8 +127,12 @@ template<class T>
 MEVector<T> &MEVector<T>::operator=(const MEVector &vec) {
     Size = vec.Size;
     Capacity = vec.Capacity;
-    T *newPtr = vec.arr;
-    this->arr = newPtr;
+    delete[] arr;
+
+    arr = new T[Capacity];
+    for (int i = 0; i < Size; ++i) {
+        arr[i] = vec.arr[i];
+    }
 
     return *this;
 }
@@ -157,7 +174,7 @@ MEVector<T>::~MEVector<T>(){
 
 // bitwise operator<< to print vector
 template<class T>
-ostream &operator<<(ostream &out, MEVector<T> vec) {
+ostream &operator<<(ostream &out,MEVector<T> vec) {
     cout << "[";
     for (int i = 0; i < vec.Size - 1; ++i) {
         cout << vec[i] << ", ";
@@ -165,6 +182,8 @@ ostream &operator<<(ostream &out, MEVector<T> vec) {
     cout << vec[vec.Size - 1] << "]" << endl;
     return out;
 }
+
+
 
 // function that return vector size
 template<class T>
@@ -187,9 +206,9 @@ bool MEVector<T>::operator==(const MEVector<T> & vec) {
 }
 
 template<class T>
-bool MEVector<T>::operator< (const MEVector<T>&another){
-    for(int i =0; i<Size;i++){
-        if(arr[i]>another.arr[i]){
+bool MEVector<T>::operator< (const MEVector<T> &another){
+    for(int i = 0; i < Size; i++){
+        if(arr[i] > another.arr[i]){
             return false;
         } else{
             continue;
@@ -334,6 +353,10 @@ int MEVector<T>::capacity() const {
     return Capacity;
 }
 
+
+//template<class T>
+//ostream &operator<<(ostream &out, MEVector<T> vec) {
+//}
 
 
 #endif //MEVECTOR_MEVECTOR_H
