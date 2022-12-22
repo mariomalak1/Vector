@@ -1,24 +1,18 @@
-#include <iostream>
 #include "MEVector.h"
-#include <vector>
+#include <iostream>
 using namespace std;
 
-void ass(MEVector<int>mario){
+
+// function to show the effect of the assignment operator
+void vec(MEVector<int>vector1){
     MEVector<int>cc;
-    cc = mario;
+    cc = vector1;
 }
 
-void fun(MEVector<int>mario){
-    cout << "[";
-    for (int i = 0; i < mario.size() - 1; ++i) {
-        cout << mario[i] << ", ";
-    }
-    cout << mario[mario.size() - 1] << "]" << endl;
-}
-
+// function to return vector to see copy constructor work well
 MEVector<int>reFun(){
-    MEVector<int>malak(5);
-    return malak;
+    MEVector<int>vect1(5);
+    return vect1;
 }
 
 MEVector<int>reFun2(){
@@ -26,53 +20,58 @@ MEVector<int>reFun2(){
 }
 
 int main() {
-    MEVector<int> mario(20);
+    MEVector<int> vector1(20);
 
     for (int i = 0; i < 20; ++i) {
-        mario[i] = i;
+        vector1[i] = i;
     }
 
-    mario[5] = 18;
+    vector1[5] = 18;
+    cout << vector1 << endl;
+
+    vector1.insert(vector1.begin(), 55);
+    cout << vector1 << endl;
+
+    vector1.insert(vector1.begin() + 5, 15);
+    cout << vector1 << endl;
+
+    vector1.insert(vector1.begin() + 18, 488);
+    cout << vector1 << endl;
+
+    vector1.insert(vector1.begin() + 0, 129);
+    cout << vector1 << endl;
+
+    cout << vector1.size() << endl;
+    cout << vector1.capacity() << endl;
+
+    vector1.erase(vector1.begin() + 3);
+    cout << vector1 << endl;
+
+    vector1.erase(vector1.begin() + 1, vector1.begin() + 5);
+    cout << vector1 << endl;
 
 
-    mario.insert(mario.begin(), 55);
-//    cout << mario << endl;
 
-    mario.insert(mario.begin() + 5, 15);
-//    cout << mario << endl;
+    vec(vector1);
+    MEVector<int>vector2(181);
 
-    mario.insert(mario.begin() + 18, 488);
-//    cout << mario << endl;
-
-    mario.insert(mario.begin() + 0, 129);
-//    cout << mario << endl;
-
-    cout << mario.size() << endl;
-    cout << mario.capacity() << endl;
-
-    mario.erase(mario.begin() + 3);
-//    cout << mario << endl;
-
-
-//    fun(mario);
-    ass(mario);
-    MEVector<int>llll(181);
     for (int i = 0; i < 181; ++i) {
-        llll[i] = i;
+        vector2[i] = i;
     }
-    cout << llll.size() << endl;
-    fun(llll);
-    llll = mario;
-    fun(llll);
-    fun(mario);
-    cout << llll.size() << endl;
-    cout << mario.size() << endl;
-    MEVector<int>ma = reFun();
-    cout << ma.size() << endl;
-    fun(ma);
+
+    cout << vector2.size() << endl;
+    cout << vector2 << endl;
+    vector2 = vector1;
+    cout << vector2 << endl;
+    cout << vector1 << endl;
+    cout << vector2.size() << endl;
+    cout << vector1.size() << endl;
+    MEVector<int>vect = reFun();
+    cout << vect.size() << endl;
+    cout << vect << endl;
 
     MEVector<int>kk = reFun2();
-    fun(kk);
+    cout << kk << endl;
 
 
     return 0;
