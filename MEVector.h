@@ -12,15 +12,18 @@
 #define MEVECTOR_MEVECTOR_H
 #include <iostream>
 using namespace std;
-
+/*
+ template class to make data structure vector
+ */
 template <class T>
 class MEVector {
 private:
-    unsigned long long int Size; // member that holds the number of elements in the vector
-    unsigned long long int Capacity; // member that holds the number of all places in the vector (in dynamic memory)
-    T *arr; // pointer of the same type of the vector
+    unsigned long long int Size; /* member that holds the number of elements in the vector */
+    unsigned long long int Capacity; /* member that holds the number of all places in the vector (in dynamic memory)*/
+    T *arr; /* pointer of the same type of the vector*/
 public:
-    // Constructors and Big 4
+    /* Constructors and Big 4
+      */
     MEVector (int); // Initialize by specific capacity
 
     // No content is added, size = 0
@@ -33,7 +36,8 @@ public:
     MEVector &operator=(const MEVector&&); // Move assignment
     MEVector();
 
-    // Access operations
+    /* Access operations
+      */
     T& operator[](int); // Access item by reference
     // Throw an exception if out of range
 
@@ -59,22 +63,34 @@ public:
     T* begin(); // Return an iterator (T*)
     T* end(); // Return an iterator (T*)
 
-    // Comparison operations
+    /* Comparison operations
+     */
     bool operator==(const MEVector<T>&); // Return true if ==
     bool operator< (const MEVector<T>&); // Compares item by item
 
     // Return true if first different item in this is < in other
-    // Capacity operations
+    /* Capacity operations
+     */
     int size() const; // Return current size of vec
     int capacity() const; // Return size of current allocated array
     int resize(); // Relocate to bigger space
     bool empty(); // Return true if size is 0
 
     // Friends
-//    friend ostream& operator << (ostream& out, MEVector<T> vec);
-    friend ostream& operator<<(ostream &out, MEVector<T>);
-};
+    friend ostream& operator << (ostream &out,  MEVector<T>vec){
+        cout << "[";
+        for (int i = 0; i < vec.Size - 1; ++i) {
+            cout << vec[i] << ", ";
+        }
+        cout << vec[vec.Size - 1] << "]" << endl;
+        return out;
+    }
 
+
+};
+/*
+ default constructor to assign vector by default values
+ */
 template<class T>
 MEVector<T>::MEVector() {
     Size = 0;
@@ -82,7 +98,9 @@ MEVector<T>::MEVector() {
     arr = new T[Capacity];
 }
 
-// constructor that takes specific integer, and it's the capacity of this vector
+/*
+ * constructor that takes specific integer, and it's the capacity of this vector
+ */
 template<class T>
 MEVector<T>::MEVector(int size) {
     this->Size = size;
@@ -94,7 +112,9 @@ MEVector<T>::MEVector(int size) {
     }
 }
 
-// constructor that initialized with array and it's size
+/*
+ constructor that initialized with array and it's size
+ */
 template<class T>
 MEVector<T>::MEVector(T* arrPtr, int n) {
     Capacity = n;
@@ -106,7 +126,9 @@ MEVector<T>::MEVector(T* arrPtr, int n) {
     }
 }
 
-// copy constructor
+/*
+ copy constructor
+ */
 template<class T>
 MEVector<T>::MEVector(const MEVector & vec) {
     this->Size = vec.Size;
@@ -122,7 +144,9 @@ MEVector<T>::MEVector(const MEVector & vec) {
 }
 
 
-// assignment operator
+/*
+ assignment operator
+ */
 template<class T>
 MEVector<T> &MEVector<T>::operator=(const MEVector &vec) {
     Size = vec.Size;
@@ -137,7 +161,9 @@ MEVector<T> &MEVector<T>::operator=(const MEVector &vec) {
     return *this;
 }
 
-// move assignment operator that change the ownership of the "rhs" object to lhs object by assignment operator
+/*
+ move assignment operator that change the ownership of the "rhs" object to "lhs" object by assignment operator
+ */
 template<class T>
 MEVector<T> &MEVector<T>::operator=(const MEVector<T> && vec) {
     if (this != &vec){
@@ -150,7 +176,9 @@ MEVector<T> &MEVector<T>::operator=(const MEVector<T> && vec) {
     }
 }
 
-// function to make the vector take more capacity that it allocated
+/*
+  function to make the vector take more capacity that it allocated
+ */
 template<class T>
 int MEVector<T>::resize() {
     T *newArr = new T[Capacity * 2];
@@ -166,32 +194,25 @@ int MEVector<T>::resize() {
     return (Capacity * 2);
 }
 
-// destructor that make memory free
+/*
+ * destructor that make memory free
+ */
 template<class T>
 MEVector<T>::~MEVector<T>(){
     delete[] arr;
 }
 
-// bitwise operator<< to print vector
-template<class T>
-ostream &operator<<(ostream &out,MEVector<T> vec) {
-    cout << "[";
-    for (int i = 0; i < vec.Size - 1; ++i) {
-        cout << vec[i] << ", ";
-    }
-    cout << vec[vec.Size - 1] << "]" << endl;
-    return out;
-}
-
-
-
-// function that return vector size
+/*
+ function that return vector size
+ */
 template<class T>
 int MEVector<T>::size() const {
     return this->Size;
 }
 
-// function to check that the two vectors are equal
+/*
+  function to check that the two vectors are equal
+ */
 template<class T>
 bool MEVector<T>::operator==(const MEVector<T> & vec) {
     if (vec.Size == this->Size) {
@@ -204,7 +225,9 @@ bool MEVector<T>::operator==(const MEVector<T> & vec) {
     }
     return false;
 }
-
+/*
+ * function to check that the first vector are smaller than second vector
+ */
 template<class T>
 bool MEVector<T>::operator< (const MEVector<T> &another){
     for(int i = 0; i < Size; i++){
@@ -217,7 +240,9 @@ bool MEVector<T>::operator< (const MEVector<T> &another){
     return true;
 }
 
-// function to clear all elements in the vector
+/*
+  function to clear all elements in the vector
+  */
 template<class T>
 void MEVector<T>::clear() {
     this->Capacity = 10;
@@ -225,18 +250,25 @@ void MEVector<T>::clear() {
     delete[] this->arr;
     arr = nullptr;
 }
-
+/*
+ function to return iterator of beginning of vector
+ */
 template<class T>
 T* MEVector<T>::begin() {
     return arr;
 }
+/*
+ function to return iterator of end of vector
+ */
 
 template<class T>
 T *MEVector<T>::end() {
     return (arr + Size - 1);
 }
 
-// function to put an element in the back of the vector
+/*
+ function to put an element in the back of the vector
+ */
 template<class T>
 int MEVector<T>::push_back(T element) {
     Size++;
@@ -246,11 +278,17 @@ int MEVector<T>::push_back(T element) {
     *((this->arr) + Size -1) = element;
     return Size - 1;
 }
+/*
+ function to delete  element from the end of the vector
+ */
 
 template<class T>
 T MEVector<T>::pop_back() {
     erase(end());
 }
+/*
+ function to insert element in the specific position of the vector
+ */
 
 template<class T>
 void MEVector<T>::insert(T *p,T element) {
@@ -292,6 +330,9 @@ void MEVector<T>::insert(T *p,T element) {
         throw invalid_argument("invalid iterator");
     }
 }
+/*
+ function to delete element in the specific position of the vector
+ */
 
 template<class T>
 void MEVector<T>::erase(T *p) {
@@ -306,7 +347,9 @@ void MEVector<T>::erase(T *p) {
         throw invalid_argument("invalid iterator");
     }
 }
-
+/*
+ function to delete elements from the specific position to another specific position in the vector
+ */
 template<class T>
 void MEVector<T>:: erase(T *p1,T *p2) {
     if (p1 > (arr - 1) and p1 < (arr + Size)){
@@ -329,6 +372,9 @@ void MEVector<T>:: erase(T *p1,T *p2) {
         throw invalid_argument("invalid iterator");
     }
 }
+/*
+ function to check that vector is empty or not
+ */
 
 template<class T>
 bool MEVector<T>::empty() {
@@ -338,7 +384,9 @@ bool MEVector<T>::empty() {
         return false;
     }
 }
-
+/*
+ operator overloading of "[]" to return index from the vector
+ */
 template<class T>
 T &MEVector<T>::operator[](int index) {
     if (index >= 0 and index < Size){
@@ -347,16 +395,14 @@ T &MEVector<T>::operator[](int index) {
         throw invalid_argument("out of range");
     }
 }
-
+/*
+ function that return capacity(size that vector can store) of the vector
+ */
 template<class T>
 int MEVector<T>::capacity() const {
     return Capacity;
 }
 
-
-//template<class T>
-//ostream &operator<<(ostream &out, MEVector<T> vec) {
-//}
 
 
 #endif //MEVECTOR_MEVECTOR_H
