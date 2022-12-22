@@ -360,7 +360,7 @@ void MEVector<T>:: erase(T *p1,T *p2) {
             count++;
         }
         for (int i = *p2+1; i < Size; ++i) {
-            newArr[i-1] = arr[i];
+            newArr[i-1-(*p2-*p1)] = arr[i];
             count++;
         }
         delete[] arr;
